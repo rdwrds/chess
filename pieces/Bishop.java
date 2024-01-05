@@ -1,6 +1,8 @@
 package pieces;
 import java.util.ArrayList;
 
+import board.Board;
+
 public class Bishop extends Piece
 {
     public Bishop(int x, int y, Color c)
@@ -15,7 +17,7 @@ public class Bishop extends Piece
         return this.icon;
     }
 
-    public ArrayList<String> getMoves(Piece[][] b)
+    public ArrayList<String> getMoves(Board board)
     {
         ArrayList<String> moves = new ArrayList<String>();
 
@@ -26,6 +28,8 @@ public class Bishop extends Piece
         //preloading x/y coords
         int x1 = this.posX;
         int y1 = this.posY;
+
+        Piece[][] b = board.getBoard();
 
         int X[] = {1, 1,-1,-1};
         int Y[] = {1,-1,-1, 1};

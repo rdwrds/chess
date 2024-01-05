@@ -1,6 +1,8 @@
 package pieces;
 import java.util.ArrayList;
 
+import board.Board;
+
 public class Knight extends Piece
 {
     public Knight(int x, int y, Color c)
@@ -10,9 +12,11 @@ public class Knight extends Piece
         this.defaultIcon = icon;
     }
 
-    public ArrayList<String> getMoves(Piece[][] b)
+    public ArrayList<String> getMoves(Board board)
     {
         ArrayList<String> moves = new ArrayList<String>();
+
+        Piece[][] b = board.getBoard();
 
         //possible knight moves
         int X[] = {1,2,2,1,-1,-2,-2,-1};

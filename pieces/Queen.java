@@ -2,6 +2,8 @@ package pieces;
 
 import java.util.ArrayList;
 
+import board.Board;
+
 public class Queen extends Piece
 {
 
@@ -12,9 +14,17 @@ public class Queen extends Piece
         this.defaultIcon = icon;
     }
 
-    public ArrayList<String> getMoves(Piece[][] b)
+    public ArrayList<String> getMoves(Board board)
     {
         ArrayList<String> moves = new ArrayList<String>();
+        ArrayList<String> badMoves = new ArrayList<String>();
+
+        boolean inCheck;
+
+
+        Piece[][] b = board.getBoard();
+        //TODO: 11/10/23: get this bitch to be implemented in classes so its easier to access
+        King king = this.color == Color.WHITE ? board.whiteKing : board.blackKing;
 
         //combined offsets of diagonal AND orthogonal moves. 0's are orthogonal
         int X[] = {0,1,1,1,0,-1,-1,-1};
@@ -40,18 +50,22 @@ public class Queen extends Piece
                 //break out of the loop if we come across one of our pieces
                 if(b[x1+xOff][y1+yOff].color == this.color) break;
 
-                //if the color is null (an empty square), just mark the space
+
+                //if the color is null (an empty square), just mark the space   
                 if(b[x1+xOff][y1+yOff].color == null)
                 {
+                    //if this piece removes check then mark that hoe
                     moves.add(temp);
                 }
                 //if its not our color and its not empty, then it must be the opponents. mark it and break the loop
                 else
                 {
                     moves.add(temp);
+                    //break anyway cuz if theres a piece there we dont wanna look at the other shit anyway
                     break;
                 }
             } 
+
 
         }
         

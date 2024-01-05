@@ -1,6 +1,8 @@
 package pieces;
 import java.util.ArrayList;
 
+import board.Board;
+
 public class King extends Piece
 {
     public boolean hasMoved;
@@ -14,9 +16,10 @@ public class King extends Piece
     }
 
     //check if move is an attempt to castle
-    public ArrayList<String> getMoves(Piece[][] b)
+    public ArrayList<String> getMoves(Board board)
     {
         ArrayList<String> moves = new ArrayList<String>();
+        Piece[][] b = board.getBoard();
 
         //all possible spaces, and their offset from the start position
         int X[] = {1,1, 1, 0,-1,-1,-1,0};
@@ -32,17 +35,18 @@ public class King extends Piece
 
             String temp = Integer.toString(endX) + Integer.toString(endY);
             
+            // 11/8/23 - im pretty sure this will break if we take any pieces with the king. use the board so we can check if we can take pieces
             if((endX > -1 && endX < 8) && (endY > -1 && endY < 8))
             {
-                moves.add(temp);
+                if(b[endX][endY].color != this.color) moves.add(temp);
             }
         }
         
         return moves;
     }
 
-    //iterates over board and see if any pieces are attacking the king
-    public ArrayList<String> getKingAttackers(Piece[][] b)
+    //1/5 - we cant use getMoves b/c we need gKA in getmoves, thatll cause a stack overflow
+    public ArrayList<String> getKingAttackers(Board board)
     {
         //TODO: implement in getInputs, to disable moves that dont remove king from check
 
@@ -50,6 +54,8 @@ public class King extends Piece
         String kingCoords = Integer.toString(posX, 10) + Integer.toString(posY, 10);
 
         ArrayList<String> kingAttackers = new ArrayList<String>();
+
+        Piece[][] b = board.getBoard();
 
         //check the board
         for(int i = 0; i < 8; i++)
@@ -63,14 +69,45 @@ public class King extends Piece
                 if(current.color == null) continue;
 
                 //is it the opps piece?
-                if(current.color != this.color)
-                {
-                    //get possbile moves for this piece
-                    ArrayList<String> moves = current.getMoves(b);
+                if(current.color == this.color) continue;
 
-                    //if its attacking the king, add it to the list
-                    if(moves.contains(kingCoords)) kingAttackers.add(currentCoords);
+                //get possbile moves for this piece
+                //sysout "getting currents moves"
+                String pieceType = current.getClass().getSimpleName();
+
+                //see if the piece is attacking manually instead of getting moves
+                boolean isAttacker;
+                switch (pieceType) {
+                    case "King":
+                        //ignore since kings cant attack each other
+                        break;
+                    case "Queen":
+                        //check row/columns/diags
+                        break;
+                    case "Bishop":
+                        //check diags
+                        //see if difference between
+                        break;
+                    case "Knight":
+                        //...check Ls (should be 8?)
+                        break;
+                    case "Rook":
+                        //check rows/cols
+                        //if(posx == i || posy == j) isAttacker = true;
+                        break;
+                    case "Pawn":
+                        //check in front to left/right of piece
+                        break;
+
+                    default:
+                        //do nuffin since its prolly empty
+                        break;
                 }
+
+                //if its attacking the king, add it to the list
+                //kingAttackers.add(currentCoords);
+
+
             }
         }
 

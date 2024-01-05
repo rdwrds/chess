@@ -6,19 +6,17 @@ import pieces.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-
-
 public class Board {
 
     private Piece[][] b;
 
     //cache the kings to know when they're in check
-    private King blackKing;
-    private King whiteKing;
+    public King blackKing;
+    public King whiteKing;
 
     //white: true  black: false
     //to track which colors turn it is
-    boolean state;
+    boolean turn;
 
 
     public Board()
@@ -28,7 +26,7 @@ public class Board {
         //white goes on the bottom (index 7 (row 8))
 
         //every game starts with white
-        state = true;
+        turn = true;
 
         b = new Piece[8][8];
 
@@ -148,9 +146,9 @@ public class Board {
         Piece start = this.b[x1][y1];
         String end = Integer.toString(x2) + Integer.toString(y2);
 
-        ArrayList<String> moves = start.getMoves(b);
+        ArrayList<String> moves = start.getMoves(this);
 
-        System.out.println(moves);
+        System.out.println(start.getClass().getSimpleName() + "'s moves: " + moves);
 
         if(moves.contains(end))
         {
@@ -211,6 +209,7 @@ public class Board {
     }
 
     //display a pieces moves to the player
+    
     private void displayMoves(ArrayList<String> moves)
     {
         //highlight ours moves
@@ -254,6 +253,8 @@ public class Board {
         return temp;
     }
 
+    //TODO: 11/4: CHECK HERE FOR CHECK! THIS IS WHERE WE DISPLAY VALID MOVES
+    //MOVES THAT PUT OUR KING IN CHECK ARE NOT VALID MOVES!!!!
     private int[] getInputs()
     {
         Scanner input = new Scanner(System.in);
@@ -266,15 +267,22 @@ public class Board {
         int[] startCoord = {};
         int[] endCoord = {};
 
-        Piece start = null;
+        Piece start = null;Color turn = this.turn ? Color.WHITE : Color.BLACK;
 
         //return array
         int[] coords = {0,0,0,0};
 
-        Color turn = this.state ? Color.WHITE : Color.BLACK;
+        turn = this.turn ? Color.WHITE : Color.BLACK;
 
         System.out.println("turn: " + turn);
 
+        //print if the the playing color has their king in check
+        King king = this.turn ? whiteKing : blackKing;
+
+
+        //11/9/23 set characters to rechoose piece if necessary (maybe 99 or)
+                
+        //11/13/23 - if we choose a piece that has no moves, reget inputs lol
         //TODO: seperate getInputs into getPieceToMove and getMoveToMake
         while(pieceToMove.length() != 2)
             {
@@ -293,7 +301,7 @@ public class Board {
                     reGetInput = true;
                 }
 
-                //since we have a valid move, lets display it
+                //since we have a valid square selected,
                 //get an array with our start moves coordinates
                 startCoord = Board.parseInput(pieceToMove);
 
@@ -314,6 +322,17 @@ public class Board {
                         reGetInput = true;
                     }
                 }
+                
+                //11/5/23
+                //this flags if a king is in check, but doesnt allow you to move.
+                //TODO: change getMoves() to ignore moves that dont remove check
+               /*
+                if(!king.getKingAttackers(this).isEmpty())
+                {
+                    System.out.println(king.color + " king is under attack!"
+                                                  + "\nPlease take your king out of check.");
+                    reGetInput = true;
+                } */
 
                 //display potential moves
                 //but first: do we have a valid move?
@@ -323,7 +342,7 @@ public class Board {
                     //display potential moves
                     if(startCoord[0] != 8 && startCoord[1] != 8)
                     {
-                        ArrayList<String> moves = start.getMoves(this.b);
+                        ArrayList<String> moves = start.getMoves(this);
 
                         displayMoves(moves);
                     }
@@ -337,8 +356,9 @@ public class Board {
             
             while(moveToMake.length() != 2)
             {
-                ArrayList<String> moves = start.getMoves(this.b);
-
+                ArrayList<String> moves = start.getMoves(this);
+                
+                //TODO: end game if 88 is entered (exit coords)
                 System.out.println("Please enter where you'd like your piece to move (same form).");
                 System.out.println("Enter 88 to quit.");
                 moveToMake = input.nextLine();
@@ -362,11 +382,12 @@ public class Board {
                     System.out.println("Cannot move piece to its own square! Please input another move.");
                     moveToMake = "";
                 }
+
                 //move validated; save input
                 if(!moveToMake.equals("")) endCoord = Board.parseInput(moveToMake);
 
                 //if a valid place to move piece is not made, display that shit again
-                if(moveToMake.equals("")) displayMoves(start.getMoves(b));
+                if(moveToMake.equals("")) displayMoves(start.getMoves(this));
             }
 
             //put start and end coords in one array, `coords`
@@ -379,22 +400,100 @@ public class Board {
         return coords;
     }
 
-    private void setState(boolean state)
+    private void setTurn(boolean turn)
     {       
-        this.state = state;
+        this.turn = turn;
     }
 
-    private boolean validateCheck(int x1, int y1, int x2, int y2)
+
+    //this function needs to be implemented in a way where we're not constantly creating stack overflows. this needs a better design, period.
+    public void removeBadMoves(Piece p)
+    {
+
+        //12/4 - CONVERT THIS FUNCTION TO WORK ON INDIVIDUAL PIECES (for getMoves) INSTEAD OF WHOLE BOARD 
+    
+        //get board
+        Piece[][] board = b;
+
+        //get whos turn it is
+        King t = turn ? whiteKing : blackKing;
+
+        ArrayList<String> moves;
+
+        int x;
+        int y;
+        //start piece
+        p = b[p.posX][p.posY];
+
+        //get pieces moves
+        moves = p.getMoves(this);
+
+        //dont iterate over an empty list?
+        //if(moves.isEmpty()) continue;
+
+        //cache of moves to remove- we cant remove them as we go b/c we get concurrency problems
+        //refreshed every time we get a new piece
+        ArrayList<String> removedMoves = new ArrayList<String>();
+        
+
+        //if(p.color != t.color) continue;
+
+        //System.out.print(p.icon + " coords: " + i + j + " #:" + moves.size() + " ");
+        
+        //System.out.println("Piece:" + p.icon + " " + String.valueOf(i) + String.valueOf(j));
+        //iterate over moves
+        for(String move : moves)
+        {
+            //end square
+            
+            x = Integer.parseInt(Character.toString(move.charAt(0)));
+            y = Integer.parseInt(Character.toString(move.charAt(1)));
+
+            
+            System.out.print(move + " " + "xy: " + x+y + "| ");
+            
+            boolean incheck = validateCheck(p.posX, p.posY, x, y, t);
+
+            if(incheck)
+            {   
+                removedMoves.add(move);
+            }
+
+            
+        }
+        //even though we remove the moves from the array, getMoves() generates the moves each time.
+        //we need to either remove them from inside the function when its called
+        //maybe we change this function and use it in getMoves() when we call it?
+        for(String moveToRemove : removedMoves)
+        {
+            moves.remove(moveToRemove);
+        }
+
+        System.out.println("moves removed from " + p.icon + ": " + removedMoves);
+        System.out.println("moves: " + moves);
+
+        //no return necessary?
+    }
+
+    //TODO: call validate check for EVERY move? since any move can expose king to attacks, we have to check EVERY move. 
+    public boolean validateCheck(int x1, int y1, int x2, int y2, King k)
     {
         //TODO: only validate move for respective king in check.
         //TODO: make sure color in check's turn is next.
+        //TODO: fix piece logic so they cannot take the king, but only attack it lol
+
         boolean ret = false;
         //use movewithoutvalidation to move piece back w/o getting 'errors'
+        Piece p = b[x1][y1];
         moveWithoutValidation(x1, y1, x2, y2);
-        ret = whiteKing.getKingAttackers(this.b).size() != 0 || blackKing.getKingAttackers(this.b).size() != 0;
-        System.out.println("either king in check " + ret);
+
+        ret = k.getKingAttackers(this).size() == 0;
+        String txt = ret ? "can" : "cannot";
+        //"piece can/cannot move"
+        //System.out.println(p.getClass().getSimpleName() + " at " + x1 + y1 + " " + txt + " move.");
         //move piece back
         moveWithoutValidation(x2, y2, x1, y1);
+        //false = cannot move, king in check
         return !ret;
     }
 
@@ -409,24 +508,30 @@ public class Board {
             //get and save inputs
             int[] coordinates = this.getInputs();
 
+            //11/29 - this code works perfectly fine for preventing moves out of check. but removing bad moves only displays moves that REMOVE CHECK.
             //if either king is in check
-            if(blackKing.getKingAttackers(this.b).size() != 0 || whiteKing.getKingAttackers(this.b).size() != 0)
+            if(blackKing.getKingAttackers(this).size() != 0 || whiteKing.getKingAttackers(this).size() != 0)
             {
-                boolean checkRemoved = validateCheck(coordinates[0], coordinates[1], coordinates[2],coordinates[3]);
+                //we already know one of the kings are in check, so neither can have a size of 0
+                King kingInCheck = whiteKing.getKingAttackers(this).size() > 0 ? whiteKing : blackKing;
+
+                boolean checkRemoved = validateCheck(coordinates[0], coordinates[1], coordinates[2],coordinates[3], kingInCheck);
                 while(!checkRemoved)
                 {
                     System.out.println("Your king is in check. Please move a piece that would remove check.");
                     coordinates = this.getInputs();
-                    checkRemoved = validateCheck(coordinates[0], coordinates[1], coordinates[2],coordinates[3]);
+                    checkRemoved = validateCheck(coordinates[0], coordinates[1], coordinates[2],coordinates[3], kingInCheck);
                 }
             }
 
             //breaks game loop before calculating move if user quits
-            if(coordinates[0] == 8 || coordinates[2] == 8) break;
+            //board is 0-7 so 8 is off the board
+            if(coordinates[0] == 8 && coordinates[2] == 8) break;
 
             //updates king cache every move
             Piece checkForKing = b[coordinates[0]][coordinates[1]];
             //are we moving a king?
+            //10/29 - is this a more concise way of doing this? 
             if(checkForKing.getClass().getSimpleName().equals("King"))
             {
                 if(checkForKing.color == Color.WHITE)
@@ -443,10 +548,12 @@ public class Board {
 
             this.move(coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
 
-            System.out.println("Black King Attackers " + blackKing.getKingAttackers(this.b));
-            System.out.println("White King Attackers " + whiteKing.getKingAttackers(this.b));
+            System.out.println("Black King Attackers " + blackKing.getKingAttackers(this));
+            System.out.println("White King Attackers " + whiteKing.getKingAttackers(this));
 
-            this.setState(!this.state);
+
+
+            this.setTurn(!this.turn);
         }   while(true);
     }
 }

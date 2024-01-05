@@ -2,6 +2,8 @@ package pieces;
 
 import java.util.ArrayList;
 
+import board.Board;
+
 public class Rook extends Piece
 {
     //in order to castle- the rook must not've moved.
@@ -14,9 +16,14 @@ public class Rook extends Piece
         hasMoved = false;
     }
 
-    public ArrayList<String> getMoves(Piece[][] b)
+    public ArrayList<String> getMoves(Board board)
     {
         ArrayList<String> moves = new ArrayList<String>();
+
+        Piece[][] b = board.getBoard();
+        //TODO: 11/10/23: get this bitch to be implemented in classes so its easier to access
+        King king = this.color == Color.WHITE ? board.whiteKing : board.blackKing;
+
 
         //variables we use to save moves in `moves` list
         int endX, endY;
