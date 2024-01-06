@@ -15,10 +15,14 @@ public class King extends Piece
         hasMoved = false;
     }
 
-    //check if move is an attempt to castle
-    public ArrayList<String> getMoves(Board board)
+    public ArrayList<String> getMoves()
     {
-        ArrayList<String> moves = new ArrayList<String>();
+        return this.moves;
+    }
+
+    public void setMoves(Board board)
+    {
+        ArrayList<String> newMoves = new ArrayList<String>();
         Piece[][] b = board.getBoard();
 
         //all possible spaces, and their offset from the start position
@@ -38,11 +42,11 @@ public class King extends Piece
             // 11/8/23 - im pretty sure this will break if we take any pieces with the king. use the board so we can check if we can take pieces
             if((endX > -1 && endX < 8) && (endY > -1 && endY < 8))
             {
-                if(b[endX][endY].color != this.color) moves.add(temp);
+                if(b[endX][endY].color != this.color) newMoves.add(temp);
             }
         }
         
-        return moves;
+        this.moves = newMoves;
     }
 
     //1/5 - we cant use getMoves b/c we need gKA in getmoves, thatll cause a stack overflow

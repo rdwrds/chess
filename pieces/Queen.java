@@ -14,9 +14,14 @@ public class Queen extends Piece
         this.defaultIcon = icon;
     }
 
-    public ArrayList<String> getMoves(Board board)
+    public ArrayList<String> getMoves()
     {
-        ArrayList<String> moves = new ArrayList<String>();
+        return this.moves;
+    }
+
+    public void setMoves(Board board)
+    {
+        ArrayList<String> newMoves = new ArrayList<String>();
         ArrayList<String> badMoves = new ArrayList<String>();
 
         boolean inCheck;
@@ -69,7 +74,7 @@ public class Queen extends Piece
 
         }
         
-        return moves;
+        this.moves = newMoves;
     }
 
     

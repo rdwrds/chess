@@ -12,9 +12,14 @@ public class Knight extends Piece
         this.defaultIcon = icon;
     }
 
-    public ArrayList<String> getMoves(Board board)
+    public ArrayList<String> getMoves()
     {
-        ArrayList<String> moves = new ArrayList<String>();
+        return this.moves;
+    }
+
+    public void setMoves(Board board)
+    {
+        ArrayList<String> newMoves = new ArrayList<String>();
 
         Piece[][] b = board.getBoard();
 
@@ -39,7 +44,7 @@ public class Knight extends Piece
             }
         }
 
-        return moves;
+        this.moves = newMoves;
     }
 
     public String toString()

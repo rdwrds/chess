@@ -16,9 +16,14 @@ public class Rook extends Piece
         hasMoved = false;
     }
 
-    public ArrayList<String> getMoves(Board board)
+    public ArrayList<String> getMoves()
     {
-        ArrayList<String> moves = new ArrayList<String>();
+        return this.moves;
+    }
+
+    public void setMoves(Board board)
+    {
+        ArrayList<String> newMoves = new ArrayList<String>();
 
         Piece[][] b = board.getBoard();
         //TODO: 11/10/23: get this bitch to be implemented in classes so its easier to access
@@ -65,7 +70,7 @@ public class Rook extends Piece
                 }
             }
         }
-        return moves;   
+        this.moves = newMoves;  
     }
 
     public String toString()

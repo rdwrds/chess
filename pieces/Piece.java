@@ -9,6 +9,7 @@ public class Piece
     public int posX;
     public int posY;
     public Color color;
+    ArrayList<String> moves;
 
     public Piece()
     {
@@ -21,19 +22,19 @@ public class Piece
         this.posY = y;
         this.color = c;
         this.icon = this.defaultIcon;
-
+        this.moves = setMoves(Board);
     }
 
-    public ArrayList<String> getMoves(Board board)
+    public ArrayList<String> getMoves()
     {
-        ArrayList<String> moves = new ArrayList<String>();
-        
-        
-        //System.out.println("calling super class legal func - returning empty ArrayList<String>");
+        System.out.println("returning moves of default piece class - is this shit right?");
+        return this.moves;
+    }
 
-        //11/5/23
-        //if king.hasKingAttackers() -> MoveW/oValidation() -> if king.hasKingAttackers() -> ignore move -> undo move
-        return moves;
+    //change board to use the piece[][] board, not object board
+    public void setMoves(Board board)
+    {
+       System.out.println("setting moves in default square - some shit goin haywire");
     }
 
     public void setIcon(String i)

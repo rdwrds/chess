@@ -16,8 +16,13 @@ public class Pawn extends Piece
         this.defaultIcon = "P";
         hasMoved = false;
     }
+    
+    public ArrayList<String> getMoves()
+    {
+        return this.moves;
+    }
 
-    public ArrayList<String> getMoves(Board board)
+    public void setMoves(Board board)
     {
         int x1 = this.posX;
         int y1 = this.posY;
@@ -28,7 +33,7 @@ public class Pawn extends Piece
         //are we gonna move up or down the board?
         int yOff = this.color == Color.WHITE ? 1 : -1;
 
-        ArrayList<String> moves = new ArrayList<String>();
+        ArrayList<String> newMoves = new ArrayList<String>();
 
         //dont look for a more concise way unless someone points it out, its not worth it 1/3/2023
         //this is also very ugly please find a more concise way ^
@@ -44,7 +49,7 @@ public class Pawn extends Piece
 
         if(x1 < 7) if(b[x1+1][y1+ yOff].color != null && b[x1+1][y1+ yOff].color != this.color) moves.add(Integer.toString(x1+1) + Integer.toString(y1+yOff));
 
-        return moves;    
+        this.moves = newMoves;    
     }
     
     public String toString()

@@ -146,7 +146,7 @@ public class Board {
         Piece start = this.b[x1][y1];
         String end = Integer.toString(x2) + Integer.toString(y2);
 
-        ArrayList<String> moves = start.getMoves(this);
+        ArrayList<String> moves = start.getMoves();
 
         System.out.println(start.getClass().getSimpleName() + "'s moves: " + moves);
 
@@ -294,9 +294,11 @@ public class Board {
                 System.out.println("Enter 88 to quit.");
                 pieceToMove = input.nextLine();
 
+                System.out.println("PTM: " + pieceToMove);
                 //dont accept numbers outside of the board's range. we use 8 for our escape character
                 if(!pieceToMove.matches("[0-8][0-8]"))
                 {
+                    System.out.println("PTM 2: " + pieceToMove);
                     System.out.println("You have entered an invalid input. Please try again.");
                     reGetInput = true;
                 }
@@ -342,7 +344,7 @@ public class Board {
                     //display potential moves
                     if(startCoord[0] != 8 && startCoord[1] != 8)
                     {
-                        ArrayList<String> moves = start.getMoves(this);
+                        ArrayList<String> moves = start.getMoves();
 
                         displayMoves(moves);
                     }
@@ -356,7 +358,7 @@ public class Board {
             
             while(moveToMake.length() != 2)
             {
-                ArrayList<String> moves = start.getMoves(this);
+                ArrayList<String> moves = start.getMoves();
                 
                 //TODO: end game if 88 is entered (exit coords)
                 System.out.println("Please enter where you'd like your piece to move (same form).");
@@ -387,7 +389,7 @@ public class Board {
                 if(!moveToMake.equals("")) endCoord = Board.parseInput(moveToMake);
 
                 //if a valid place to move piece is not made, display that shit again
-                if(moveToMake.equals("")) displayMoves(start.getMoves(this));
+                if(moveToMake.equals("")) displayMoves(start.getMoves());
             }
 
             //put start and end coords in one array, `coords`
@@ -426,7 +428,7 @@ public class Board {
         p = b[p.posX][p.posY];
 
         //get pieces moves
-        moves = p.getMoves(this);
+        moves = p.getMoves();
 
         //dont iterate over an empty list?
         //if(moves.isEmpty()) continue;

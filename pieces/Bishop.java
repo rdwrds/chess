@@ -17,9 +17,14 @@ public class Bishop extends Piece
         return this.icon;
     }
 
-    public ArrayList<String> getMoves(Board board)
+    public ArrayList<String> getMoves()
     {
-        ArrayList<String> moves = new ArrayList<String>();
+        return this.moves;
+    }
+
+    public void setMoves(Board board)
+    {
+        ArrayList<String> newMoves = new ArrayList<String>();
 
         //variables we use to save moves in `moves` list
         int endX, endY;
@@ -63,6 +68,6 @@ public class Bishop extends Piece
                 }
             }
         }
-        return moves;
+        this.moves = newMoves;
     }
 }
