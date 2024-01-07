@@ -91,6 +91,9 @@ public class Board {
             }
         }
 
+        //init moves arraylists
+        updateMoves();
+
         whiteKing = (King) b[4][0];
         blackKing = (King) b[4][7];
     }
@@ -135,6 +138,18 @@ public class Board {
         for(int i = 0; i < 8; i++) System.out.print(i + "  ");
         System.out.println();
         System.out.println();
+    }
+
+    public void updateMoves()
+    {
+        //sets all moves (should prolly put it in different place)
+        for(int i = 0; i < 8; i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                b[i][j].setMoves(this);
+            }
+        }
     }
 
     //returns if pos is empty
@@ -505,6 +520,9 @@ public class Board {
     {
         do
         {
+
+            updateMoves();
+
             this.displayBoard();
 
             //get and save inputs
