@@ -40,7 +40,7 @@ public class Knight extends Piece
 
             if((endX > -1 && endX < 8) && (endY > -1 && endY < 8))
             {
-                if(b[endX][endY].color != this.color) moves.add(temp);
+                if(b[endX][endY].color != this.color) newMoves.add(temp);
             }
         }
 

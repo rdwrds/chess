@@ -60,12 +60,12 @@ public class Queen extends Piece
                 if(b[x1+xOff][y1+yOff].color == null)
                 {
                     //if this piece removes check then mark that hoe
-                    moves.add(temp);
+                    newMoves.add(temp);
                 }
                 //if its not our color and its not empty, then it must be the opponents. mark it and break the loop
                 else
                 {
-                    moves.add(temp);
+                    newMoves.add(temp);
                     //break anyway cuz if theres a piece there we dont wanna look at the other shit anyway
                     break;
                 }

@@ -6,6 +6,7 @@ import board.Board;
 
 public class Rook extends Piece
 {
+    
     //in order to castle- the rook must not've moved.
     public boolean hasMoved;
     public Rook(int x, int y, Color c)
@@ -54,18 +55,18 @@ public class Rook extends Piece
 
                 temp = Integer.toString(endX) + Integer.toString(endY);
 
-
+                System.out.println(b[x1+xOff][y1+yOff].icon);
                 if(b[x1+xOff][y1+yOff].color == this.color) break;
 
                 //if the color is null (an empty square), just mark the space
                 if(b[x1+xOff][y1+yOff].color == null)
                 {
-                    moves.add(temp);
+                    newMoves.add(temp);
                 }
                 //if its not our color and its not empty, then it must be the opponents. mark it and break the loop
                 else
                 {
-                    moves.add(temp);
+                    newMoves.add(temp);
                     break;
                 }
             }

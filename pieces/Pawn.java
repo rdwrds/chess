@@ -39,15 +39,15 @@ public class Pawn extends Piece
         //this is also very ugly please find a more concise way ^
 
         //1st move
-        if(!this.hasMoved) if(b[x1][y1 + yOff * 2].color == null) moves.add(Integer.toString(x1) + Integer.toString(y1+yOff*2));
+        if(!this.hasMoved) if(b[x1][y1 + yOff * 2].color == null) newMoves.add(Integer.toString(x1) + Integer.toString(y1+yOff*2));
         
         //regular move
-        if(b[x1][y1+ yOff].color == null) moves.add(Integer.toString(x1) + Integer.toString(y1+yOff));
+        if(b[x1][y1+ yOff].color == null) newMoves.add(Integer.toString(x1) + Integer.toString(y1+yOff));
         
         //diag attacks
-        if(x1 > 0) if(b[x1-1][y1+ yOff].color != null && b[x1-1][y1+ yOff].color != this.color) moves.add(Integer.toString(x1-1) + Integer.toString(y1+yOff));
+        if(x1 > 0) if(b[x1-1][y1+ yOff].color != null && b[x1-1][y1+ yOff].color != this.color) newMoves.add(Integer.toString(x1-1) + Integer.toString(y1+yOff));
 
-        if(x1 < 7) if(b[x1+1][y1+ yOff].color != null && b[x1+1][y1+ yOff].color != this.color) moves.add(Integer.toString(x1+1) + Integer.toString(y1+yOff));
+        if(x1 < 7) if(b[x1+1][y1+ yOff].color != null && b[x1+1][y1+ yOff].color != this.color) newMoves.add(Integer.toString(x1+1) + Integer.toString(y1+yOff));
 
         this.moves = newMoves;    
     }

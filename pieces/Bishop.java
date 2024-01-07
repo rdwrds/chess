@@ -58,12 +58,12 @@ public class Bishop extends Piece
                 //if the color is null (an empty square), just mark the space
                 if(b[x1+xOff][y1+yOff].color == null)
                 {
-                    moves.add(temp);
+                    newMoves.add(temp);
                 }
                 //if its not our color and its not empty, then it must be the opponents. mark it and break the loop
                 else
                 {
-                    moves.add(temp);
+                    newMoves.add(temp);
                     break;
                 }
             }

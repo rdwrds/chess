@@ -22,7 +22,7 @@ public class Piece
         this.posY = y;
         this.color = c;
         this.icon = this.defaultIcon;
-        this.moves = setMoves(Board);
+        ArrayList<String> moves = new ArrayList<>();
     }
 
     public ArrayList<String> getMoves()
@@ -34,7 +34,7 @@ public class Piece
     //change board to use the piece[][] board, not object board
     public void setMoves(Board board)
     {
-       System.out.println("setting moves in default square - some shit goin haywire");
+       //System.out.println("setting moves in default piece class - some shit goin haywire");
     }
 
     public void setIcon(String i)
