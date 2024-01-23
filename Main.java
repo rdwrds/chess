@@ -6,5 +6,5 @@ class main{
     {
         Board bruh = new Board();
         bruh.play();
-    }
+    }//print gka
 }   

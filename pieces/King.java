@@ -50,7 +50,8 @@ public class King extends Piece
     }
 
     //1/5 - we cant use getMoves b/c we need gKA in getmoves, thatll cause a stack overflow
-    public ArrayList<String> getKingAttackers(Board board)
+    public ArrayList<String> 
+    getKingAttackers(Board board)
     {
         //TODO: implement in getInputs, to disable moves that dont remove king from check
 
@@ -79,38 +80,11 @@ public class King extends Piece
                 //sysout "getting currents moves"
                 String pieceType = current.getClass().getSimpleName();
 
-                //see if the piece is attacking manually instead of getting moves
-                boolean isAttacker;
-                switch (pieceType) {
-                    case "King":
-                        //ignore since kings cant attack each other
-                        break;
-                    case "Queen":
-                        //check row/columns/diags
-                        break;
-                    case "Bishop":
-                        //check diags
-                        //see if difference between
-                        break;
-                    case "Knight":
-                        //...check Ls (should be 8?)
-                        break;
-                    case "Rook":
-                        //check rows/cols
-                        //if(posx == i || posy == j) isAttacker = true;
-                        break;
-                    case "Pawn":
-                        //check in front to left/right of piece
-                        break;
-
-                    default:
-                        //do nuffin since its prolly empty
-                        break;
+                if(current.moves.contains(kingCoords))
+                {
+                    //if its attacking the king, add it to the list
+                    kingAttackers.add(currentCoords);
                 }
-
-                //if its attacking the king, add it to the list
-                //kingAttackers.add(currentCoords);
-
 
             }
         }

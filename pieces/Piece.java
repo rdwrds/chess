@@ -9,7 +9,7 @@ public class Piece
     public int posX;
     public int posY;
     public Color color;
-    ArrayList<String> moves;
+    public ArrayList<String> moves;
 
     public Piece()
     {
@@ -35,6 +35,11 @@ public class Piece
     public void setMoves(Board board)
     {
        //System.out.println("setting moves in default piece class - some shit goin haywire");
+    }
+
+    public void removeBadMoves()
+    {
+
     }
 
     public void setIcon(String i)

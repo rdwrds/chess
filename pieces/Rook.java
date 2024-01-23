@@ -55,11 +55,10 @@ public class Rook extends Piece
 
                 temp = Integer.toString(endX) + Integer.toString(endY);
 
-                System.out.println(b[x1+xOff][y1+yOff].icon);
-                if(b[x1+xOff][y1+yOff].color == this.color) break;
+                if(b[endX][endY].color == this.color) break;
 
                 //if the color is null (an empty square), just mark the space
-                if(b[x1+xOff][y1+yOff].color == null)
+                if(b[endX][endY].color == null)
                 {
                     newMoves.add(temp);
                 }
